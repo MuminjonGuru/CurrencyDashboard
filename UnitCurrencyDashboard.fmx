@@ -1,0 +1,186 @@
+object FormCurrencyDashboard: TFormCurrencyDashboard
+  Left = 0
+  Top = 0
+  Caption = 'Currency Dashboard'
+  ClientHeight = 528
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Grid1: TGrid
+    CanFocus = True
+    ClipChildren = True
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 624.000000000000000000
+    Size.Height = 305.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    RowCount = 1
+    Viewport.Width = 620.000000000000000000
+    Viewport.Height = 280.000000000000000000
+  end
+  object ButtonGetLiveRates: TButton
+    Position.X = 552.000000000000000000
+    Position.Y = 321.000000000000000000
+    TabOrder = 6
+    Text = 'Live Rates'
+    OnClick = Button1Click
+  end
+  object EditFrom: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 7
+    Position.X = 184.000000000000000000
+    Position.Y = 368.000000000000000000
+    TextPrompt = 'USD'
+    object Label1: TLabel
+      Position.X = 104.000000000000000000
+      Position.Y = 2.000000000000000000
+      Size.Width = 33.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'To : '
+      TabOrder = 0
+    end
+  end
+  object EditTo: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 8
+    Position.X = 329.000000000000000000
+    Position.Y = 368.000000000000000000
+    Size.Width = 80.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TextPrompt = 'EUR'
+    object Button2: TButton
+      Position.X = -144.000000000000000000
+      Position.Y = 132.000000000000000000
+      Size.Width = 225.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Convert'
+      OnClick = Button2Click
+    end
+  end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    TextSettings.WordWrap = True
+    Position.X = 184.000000000000000000
+    Position.Y = 398.000000000000000000
+    Size.Width = 225.000000000000000000
+    Size.Height = 96.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 18
+    Viewport.Width = 221.000000000000000000
+    Viewport.Height = 92.000000000000000000
+  end
+  object EditAmount: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 19
+    Position.X = 256.000000000000000000
+    Position.Y = 338.000000000000000000
+    TextPrompt = 'Amount'
+  end
+  object RESTClient1: TRESTClient
+    Accept = 'application/json, text/plain; q=0.9, text/html;q=0.8,'
+    AcceptCharset = 'utf-8, *;q=0.8'
+    BaseURL = 
+      'https://api.apilayer.com/currency_data/live?apikey=LuMIKKv3t3i6c' +
+      'EZfQYK8WJRJjhfEIArR&source=USD&currencies=EUR,GBP,JPY,MYR,UZS'
+    Params = <>
+    Left = 496
+    Top = 192
+  end
+  object RESTRequest1: TRESTRequest
+    AssignedValues = [rvConnectTimeout, rvReadTimeout]
+    Client = RESTClient1
+    Params = <>
+    Response = RESTResponse1
+    Left = 360
+    Top = 96
+  end
+  object RESTResponse1: TRESTResponse
+    ContentType = 'application/json'
+    RootElement = 'quotes'
+    Left = 496
+    Top = 96
+  end
+  object RESTResponseDataSetAdapter1: TRESTResponseDataSetAdapter
+    Active = True
+    Dataset = FDMemTable1
+    FieldDefs = <>
+    Response = RESTResponse1
+    TypesMode = Rich
+    Left = 496
+    Top = 48
+  end
+  object FDMemTable1: TFDMemTable
+    Active = True
+    FieldDefs = <
+      item
+        Name = 'USDEUR'
+        DataType = ftFloat
+      end
+      item
+        Name = 'USDGBP'
+        DataType = ftFloat
+      end
+      item
+        Name = 'USDJPY'
+        DataType = ftFloat
+      end
+      item
+        Name = 'USDMYR'
+        DataType = ftFloat
+      end
+      item
+        Name = 'USDUZS'
+        DataType = ftFloat
+      end>
+    IndexDefs = <>
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvUpdateChngFields, uvUpdateMode, uvLockMode, uvLockPoint, uvLockWait, uvRefreshMode, uvFetchGeneratorsPoint, uvCheckRequired, uvCheckReadOnly, uvCheckUpdatable]
+    UpdateOptions.LockWait = True
+    UpdateOptions.FetchGeneratorsPoint = gpNone
+    UpdateOptions.CheckRequired = False
+    StoreDefs = True
+    Left = 496
+    Top = 144
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 361
+    Top = 149
+    object LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      GridControl = Grid1
+      Columns = <>
+    end
+  end
+  object BindSourceDB1: TBindSourceDB
+    DataSet = FDMemTable1
+    ScopeMappings = <>
+    Left = 361
+    Top = 200
+  end
+  object NetHTTPClient1: TNetHTTPClient
+    Accept = 'application/json, text/plain; q=0.9, text/html;q=0.8,'
+    AcceptCharSet = 'utf-8, *;q=0.8'
+    UserAgent = 'Embarcadero URI Client/1.0'
+    Left = 43
+    Top = 357
+  end
+  object NetHTTPRequest1: TNetHTTPRequest
+    Client = NetHTTPClient1
+    Left = 559
+    Top = 381
+  end
+end
